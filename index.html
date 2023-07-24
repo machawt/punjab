@@ -9,7 +9,7 @@
       background-color: #f9f9f9;
     }
     .quiz-container {
-      max-width: 600px;
+      max-width: 400px;
       margin: 0 auto;
       padding: 20px;
       border: 1px solid #ccc;
@@ -68,15 +68,26 @@
     .hidden {
       display: none;
     }
+figure {
+        margin: 0 auto;
+      font-size: 8px;
+}
   </style>
 </head>
 <body>
   <div class="quiz-container">
     <div class="question" id="question"></div>
     <div class="options" id="options"></div>
-    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0 </div>
     <div class="feedback hidden" id="feedback"></div>
-  </div>
+<figure>
+<img src="gurmukhi.jpg" alt="Gurmukhi Script" width="300" height="300">
+  <figcaption>Source:https://en.wikipedia.org/wiki/File:Gurmukhi_Script_-_modern_alphabet.svg</figcaption>
+</figure> 
+ </div>
+
+
+
   <script>
     const punjabiAlphabet = [
       { letter: 'ਅ', sound: 'a - like the "a" in "father"' },
