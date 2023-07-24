@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Punjabi Alphabet Matching Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .question {
+      font-size: 36px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .option {
+      width: 45%;
+      padding: 15px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      text-align: center;
+      background-color: #f2f2f2;
+      transition: background-color 0.2s ease;
+    }
+    .option:hover {
+      background-color: #e0e0e0;
+    }
+    .score {
+      font-size: 20px;
+      margin-top: 15px;
+      color: #555;
+    }
+    .feedback {
+      margin-top: 30px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 18px;
+      color: #555;
+      background-color: #f2f2f2;
+    }
+    .feedback h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .feedback p {
+      margin-bottom: 5px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <div class="feedback hidden" id="feedback"></div>
+  </div>
+  <script>
+    const punjabiAlphabet = [
+      { letter: 'ਅ', sound: 'a - like the "a" in "father"' },
+      { letter: 'ਆ', sound: 'ā - like the "a" in "father" but held longer' },
+      { letter: 'ਇ', sound: 'i - like the "i" in "bit"' },
+      { letter: 'ਈ', sound: 'ī - like the "ee" in "bee"' },
+      { letter: 'ਉ', sound: 'u - like the "u" in "put"' },
+      { letter: 'ਊ', sound: 'ū - like the "oo" in "moon"' },
+      { letter: 'ਏ', sound: 'ē - like the "e" in "bed"' },
+      { letter: 'ਐ', sound: 'ai - like the "i" in "ice"' },
+      { letter: 'ਓ', sound: 'o - like the "o" in "go"' },
+      { letter: 'ਔ', sound: 'au - like the "ou" in "house"' },
+      { letter: 'ਕ', sound: 'k - like the "k" in "kite"' },
+      { letter: 'ਖ', sound: 'kh - similar to "k" but with more breath' },
+      { letter: 'ਗ', sound: 'g - like the "g" in "go"' },
+      { letter: 'ਘ', sound: 'gh - similar to "g" but with more breath' },
+      { letter: 'ਙ', sound: 'ṅ - like the "ng" in "sing"' },
+      { letter: 'ਚ', sound: 'c - like the "ch" in "chat"' },
+      { letter: 'ਛ', sound: 'chh - similar to "ch" but with more breath' },
+      { letter: 'ਜ', sound: 'j - like the "j" in "jump"' },
+      { letter: 'ਝ', sound: 'jh - similar to "j" but with more breath' },
+      { letter: 'ਞ', sound: 'ñ - like the "ny" in "canyon"' },
+      { letter: 'ਟ', sound: 'ṭ - like the "t" in "top"' },
+      { letter: 'ਠ', sound: 'ṭh - similar to "ṭ" but with more breath' },
+      { letter: 'ਡ', sound: 'ḍ - like the "d" in "dog"' },
+      { letter: 'ਢ', sound: 'ḍh - similar to "ḍ" but with more breath' },
+      { letter: 'ਣ', sound: 'ṇ - like the "n" in "nice"' },
+      { letter: 'ਤ', sound: 't - like the "t" in "top"' },
+      { letter: 'ਥ', sound: 'th - similar to "t" but with more breath' },
+      { letter: 'ਦ', sound: 'd - like the "d" in "dog"' },
+      { letter: 'ਧ', sound: 'dh - similar to "d" but with more breath' },
+      { letter: 'ਨ', sound: 'n - like the "n" in "nice"' },
+      { letter: 'ਪ', sound: 'p - like the "p" in "pen"' },
+      { letter: 'ਫ', sound: 'ph - similar to "p" but with more breath' },
+      { letter: 'ਬ', sound: 'b - like the "b" in "bat"' },
+      { letter: 'ਭ', sound: 'bh - similar to "b" but with more breath' },
+      { letter: 'ਮ', sound: 'm - like the "m" in "man"' },
+      { letter: 'ਯ', sound: 'y - like the "y" in "yes"' },
+      { letter: 'ਰ', sound: 'r - rolled "r" sound, like in Spanish "pero"' },
+      { letter: 'ਲ', sound: 'l - like the "l" in "lot"' },
+      { letter: 'ਵ', sound: 'v - like the "v" in "vase"' },
+      { letter: 'ਸ਼', sound: 'ś - like the "sh" in "she"' },
+      { letter: 'ਸ', sound: 's - like the "s" in "see"' },
+      { letter: 'ਹ', sound: 'h - like the "h" in "hat"' },
+      { letter: 'ਲ਼', sound: 'ḷ - similar to "l" but with the tongue curled back' },
+      { letter: 'ਕ੍ਸ', sound: 'kṣ - like the "x" in "extra"' },
+      { letter: 'ੱ', sound: 'ੱ - when added to a vowel, it lengthens the sound' },
+      { letter: 'ਖੜਾ ਪੈਰ', sound: 'ਖੜਾ ਪੈਰ - Khada pair, it represents a raised foot sound' },
+      // Add the rest of the Punjabi alphabet objects here...
+    ];
+
+    const quizContainer = document.querySelector('.quiz-container');
+    const questionElement = document.getElementById('question');
+    const optionsElement = document.getElementById('options');
+    const scoreElement = document.getElementById('score');
+    const feedbackElement = document.getElementById('feedback');
+    let numQuestions = 0;
+    let currentQuestionIndex = 0;
+    let scoreCorrect = 0;
+    let scoreIncorrect = 0;
+    let wrongAnswers = [];
+
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function startQuiz() {
+      numQuestions = parseInt(prompt('How many questions would you like in the quiz?', '5'));
+      if (isNaN(numQuestions) || numQuestions <= 0) {
+        alert('Please enter a valid number greater than 0.');
+        startQuiz();
+      } else {
+        shuffleArray(punjabiAlphabet);
+        displayQuestion();
+      }
+    }
+
+    function displayQuestion() {
+      questionElement.textContent = punjabiAlphabet[currentQuestionIndex].letter;
+      optionsElement.innerHTML = '';
+
+      // Generate three random indices for wrong options
+      const wrongOptionIndices = [];
+      while (wrongOptionIndices.length < 3) {
+        const randomIndex = getRandomInt(punjabiAlphabet.length);
+        if (randomIndex !== currentQuestionIndex && !wrongOptionIndices.includes(randomIndex)) {
+          wrongOptionIndices.push(randomIndex);
+        }
+      }
+
+      // Get the correct and wrong options based on the indices
+      const correctOption = punjabiAlphabet[currentQuestionIndex];
+      const options = [correctOption];
+      wrongOptionIndices.forEach(index => options.push(punjabiAlphabet[index]));
+
+      // Shuffle the options
+      shuffleArray(options);
+
+      // Display the options
+      options.forEach(option => {
+        const optionElement = document.createElement('div');
+        optionElement.classList.add('option');
+        optionElement.textContent = option.sound;
+        optionElement.addEventListener('click', () => checkAnswer(option));
+        optionsElement.appendChild(optionElement);
+      });
+    }
+
+    function checkAnswer(selectedOption) {
+      const correctOption = punjabiAlphabet[currentQuestionIndex];
+      if (selectedOption === correctOption) {
+        scoreCorrect++;
+      } else {
+        scoreIncorrect++;
+        wrongAnswers.push({ question: punjabiAlphabet[currentQuestionIndex].letter, incorrect: selectedOption.sound, correct: correctOption.sound });
+        alert(`Wrong Answer! The correct answer is: ${correctOption.sound}`);
+        displayQuestion(); // Repeat the same question
+        return;
+      }
+
+      currentQuestionIndex++;
+      if (currentQuestionIndex < numQuestions) {
+        displayQuestion();
+      } else {
+        showFinalScore();
+      }
+
+      scoreElement.textContent = `Correct: ${scoreCorrect} | Incorrect: ${scoreIncorrect}`;
+    }
+
+    function showFinalScore() {
+      feedbackElement.textContent = `Quiz completed! Your final score is: Correct - ${scoreCorrect} | Incorrect - ${scoreIncorrect}`;
+      feedbackElement.classList.remove('hidden');
+      if (wrongAnswers.length > 0) {
+        feedbackElement.innerHTML += '<h3>Review wrong answers:</h3>';
+        wrongAnswers.forEach((wrongAnswer, index) => {
+          feedbackElement.innerHTML += `<p><strong>Question ${index + 1}:</strong> ${wrongAnswer.question}<br> Your Answer - ${wrongAnswer.incorrect} | Correct Answer - ${wrongAnswer.correct}</p>`;
+        });
+      }
+    }
+
+    startQuiz();
+  </script>
+</body>
+</html>
